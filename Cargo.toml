@@ -1,0 +1,7 @@
+[package]
+name = "bopper"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bytes = { version = "1.7", features = ["serde", "std"] }
