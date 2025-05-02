@@ -30,6 +30,16 @@ impl<'a> LittleEndianReadBuffer<'a> {
     }
 
     #[cfg(target_endian = "little")]
+    pub fn get_u24(&mut self) -> u32 {
+        u32::from(self.buffer.get_u8()) | u32::from(self.buffer.get_u8()) >> 8 | u32::from(self.buffer.get_u8()) >> 16
+    }
+
+    #[cfg(target_endian = "big")]
+    pub fn get_u24(&mut self) -> u32 {
+        u32::from(self.buffer.get_u8()) >> 16 | u32::from(self.buffer.get_u8()) >> 8 | u32::from(self.buffer.get_u8())
+    }
+
+    #[cfg(target_endian = "little")]
     pub fn get_u32(&mut self) -> u32 {
         self.buffer.get_u32()
     }
@@ -57,6 +67,26 @@ impl<'a> LittleEndianReadBuffer<'a> {
     #[cfg(target_endian = "big")]
     pub fn get_u128(&mut self) -> u128 {
         self.buffer.get_u128_le()
+    }
+
+    #[cfg(target_endian = "little")]
+    pub fn get_f32(&mut self) -> f32 {
+        self.buffer.get_f32()
+    }
+
+    #[cfg(target_endian = "big")]
+    pub fn get_f32(&mut self) -> f32 {
+        self.buffer.get_f32_le()
+    }
+
+    #[cfg(target_endian = "little")]
+    pub fn get_f64(&mut self) -> f64 {
+        self.buffer.get_f64()
+    }
+
+    #[cfg(target_endian = "big")]
+    pub fn get_f64(&mut self) -> f64 {
+        self.buffer.get_f64_le()
     }
 
     pub fn get_slice(&mut self, length: usize) -> Vec<u8> {

@@ -36,6 +36,20 @@ impl BigEndianWriteBuffer {
     }
 
     #[cfg(target_endian = "big")]
+    pub fn put_u24(&mut self, value: u32) {
+        self.buffer.put_u8(value & 0x00_00_00_FF);
+        self.buffer.put_u8((value & 0x00_00_FF_00) >> 8);
+        self.buffer.put_u8((value & 0x00_FF_00_00) >> 16);
+    }
+
+    #[cfg(target_endian = "little")]
+    pub fn get_u24(&mut self, value: u32) {
+        self.buffer.put_u8(((value & 0x00_FF_00_00) >> 16) as u8);
+        self.buffer.put_u8(((value & 0x00_00_FF_00) >> 8) as u8);
+        self.buffer.put_u8((value & 0x00_00_00_FF) as u8);
+    }
+
+    #[cfg(target_endian = "big")]
     pub fn put_u32(&mut self, value: u32) {
         self.buffer.put_u32(value);
     }
@@ -63,6 +77,26 @@ impl BigEndianWriteBuffer {
     #[cfg(target_endian = "little")]
     pub fn put_u128(&mut self, value: u128) {
         self.buffer.put_u128_le(value);
+    }
+
+    #[cfg(target_endian = "big")]
+    pub fn put_f32(&mut self, value: f32) {
+        self.buffer.put_f32(value);
+    }
+
+    #[cfg(target_endian = "little")]
+    pub fn put_f32(&mut self, value: f32) {
+        self.buffer.put_f32_le(value)
+    }
+
+    #[cfg(target_endian = "big")]
+    pub fn put_f64(&mut self, value: f64) {
+        self.buffer.put_f64(value);
+    }
+
+    #[cfg(target_endian = "little")]
+    pub fn put_f64(&mut self, value: f64) {
+        self.buffer.put_f64_le(value);
     }
 
     pub fn put_slice(&mut self, slice: &[u8]) {
