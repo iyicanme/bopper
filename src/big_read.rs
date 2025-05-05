@@ -92,4 +92,8 @@ impl<'a> BigEndianReadBuffer<'a> {
     pub fn get_slice(&mut self, length: usize) -> Vec<u8> {
         self.buffer.copy_to_bytes(length).to_vec()
     }
+
+    pub fn to_vec(&self) -> Vec<u8> {
+        self.buffer.to_vec()
+    }
 }
