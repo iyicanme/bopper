@@ -174,6 +174,17 @@ impl ReadBuffer for BigEndianReadBuffer<'_> {
         Some(self.buffer.copy_to_bytes(length).to_vec())
     }
 
+    fn get_buffer(&mut self, length: usize) -> Option<impl ReadBuffer> {
+        if self.buffer.len() < length {
+            return None;
+        }
+
+        let (buffer, own) = self.buffer.split_at(length);
+        self.buffer = own;
+
+        Some(Self { buffer })
+    }
+
     fn to_vec(&self) -> Vec<u8> {
         self.buffer.to_vec()
     }

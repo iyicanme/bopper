@@ -46,7 +46,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u16>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u16_le())
     }
 
@@ -55,7 +55,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < 3 {
             return None;
         }
-        
+
         let u24 = u32::from(self.buffer.get_u8())
             | u32::from(self.buffer.get_u8()) >> 8
             | u32::from(self.buffer.get_u8()) >> 16;
@@ -68,7 +68,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < 3 {
             return None;
         }
-        
+
         let u24 = u32::from(self.buffer.get_u8()) >> 16
             | u32::from(self.buffer.get_u8()) >> 8
             | u32::from(self.buffer.get_u8());
@@ -81,7 +81,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u32>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u32())
     }
 
@@ -90,7 +90,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u32>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u32_le())
     }
 
@@ -99,7 +99,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u64>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u64())
     }
 
@@ -108,7 +108,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u64>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u64_le())
     }
 
@@ -117,7 +117,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u128>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u128())
     }
 
@@ -126,7 +126,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<u128>() {
             return None;
         }
-        
+
         Some(self.buffer.get_u128_le())
     }
 
@@ -135,7 +135,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<f32>() {
             return None;
         }
-        
+
         Some(self.buffer.get_f32())
     }
 
@@ -144,7 +144,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<f32>() {
             return None;
         }
-        
+
         Some(self.buffer.get_f32_le())
     }
 
@@ -153,7 +153,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<f64>() {
             return None;
         }
-        
+
         Some(self.buffer.get_f64())
     }
 
@@ -162,7 +162,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < size_of::<f64>() {
             return None;
         }
-        
+
         Some(self.buffer.get_f64_le())
     }
 
@@ -170,8 +170,19 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
         if self.buffer.len() < length {
             return None;
         }
-        
+
         Some(self.buffer.copy_to_bytes(length).to_vec())
+    }
+
+    fn get_buffer(&mut self, length: usize) -> Option<impl ReadBuffer> {
+        if self.buffer.len() < length {
+            return None;
+        }
+        
+        let (buffer, own) = self.buffer.split_at(length);
+        self.buffer = own;
+        
+        Some(Self { buffer })
     }
 
     fn to_vec(&self) -> Vec<u8> {

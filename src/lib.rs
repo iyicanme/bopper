@@ -28,6 +28,8 @@ pub trait ReadBuffer {
     fn get_f64(&mut self) -> Option<f64>;
 
     fn get_slice(&mut self, length: usize) -> Option<Vec<u8>>;
+    
+    fn get_buffer(&mut self, length: usize) -> Option<impl ReadBuffer>;
 
     fn to_vec(&self) -> Vec<u8>;
 }
