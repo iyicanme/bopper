@@ -9,25 +9,25 @@ mod little_read;
 mod little_write;
 
 pub trait ReadBuffer {
-    fn skip(&mut self, amount: usize);
+    fn skip(&mut self, amount: usize) -> bool;
 
-    fn get_u8(&mut self) -> u8;
+    fn get_u8(&mut self) -> Option<u8>;
 
-    fn get_u16(&mut self) -> u16;
+    fn get_u16(&mut self) -> Option<u16>;
 
-    fn get_u24(&mut self) -> u32;
+    fn get_u24(&mut self) -> Option<u32>;
 
-    fn get_u32(&mut self) -> u32;
+    fn get_u32(&mut self) -> Option<u32>;
 
-    fn get_u64(&mut self) -> u64;
+    fn get_u64(&mut self) -> Option<u64>;
 
-    fn get_u128(&mut self) -> u128;
+    fn get_u128(&mut self) -> Option<u128>;
 
-    fn get_f32(&mut self) -> f32;
+    fn get_f32(&mut self) -> Option<f32>;
 
-    fn get_f64(&mut self) -> f64;
+    fn get_f64(&mut self) -> Option<f64>;
 
-    fn get_slice(&mut self, length: usize) -> Vec<u8>;
+    fn get_slice(&mut self, length: usize) -> Option<Vec<u8>>;
 
     fn to_vec(&self) -> Vec<u8>;
 }

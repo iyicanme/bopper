@@ -14,90 +14,164 @@ impl<'a> BigEndianReadBuffer<'a> {
 }
 
 impl ReadBuffer for BigEndianReadBuffer<'_> {
-    fn skip(&mut self, amount: usize) {
+    fn skip(&mut self, amount: usize) -> bool {
+        if amount > self.buffer.len() {
+            return false;
+        }
+
         self.buffer.advance(amount);
+
+        true
     }
 
-    fn get_u8(&mut self) -> u8 {
-        self.buffer.get_u8()
+    fn get_u8(&mut self) -> Option<u8> {
+        if self.buffer.is_empty() {
+            return None;
+        }
+
+        Some(self.buffer.get_u8())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_u16(&mut self) -> u16 {
-        self.buffer.get_u16()
+    fn get_u16(&mut self) -> Option<u16> {
+        if self.buffer.len() < size_of::<u16>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u16())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_u16(&mut self) -> u16 {
-        self.buffer.get_u16_le()
+    fn get_u16(&mut self) -> Option<u16> {
+        if self.buffer.len() < size_of::<u16>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u16_le())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_u24(&mut self) -> u32 {
-        u32::from(self.buffer.get_u8())
+    fn get_u24(&mut self) -> Option<u32> {
+        if self.buffer.len() < size_of::<u16>() {
+            return None;
+        }
+
+        let u24 = u32::from(self.buffer.get_u8())
             | u32::from(self.buffer.get_u8()) >> 8
-            | u32::from(self.buffer.get_u8()) >> 16
+            | u32::from(self.buffer.get_u8()) >> 16;
+
+        Some(u24)
     }
 
     #[cfg(target_endian = "little")]
-    fn get_u24(&mut self) -> u32 {
-        u32::from(self.buffer.get_u8()) >> 16
+    fn get_u24(&mut self) -> Option<u32> {
+        if self.buffer.len() < size_of::<u16>() {
+            return None;
+        }
+
+        let u24 = u32::from(self.buffer.get_u8()) >> 16
             | u32::from(self.buffer.get_u8()) >> 8
-            | u32::from(self.buffer.get_u8())
+            | u32::from(self.buffer.get_u8());
+
+        Some(u24)
     }
 
     #[cfg(target_endian = "big")]
-    fn get_u32(&mut self) -> u32 {
-        self.buffer.get_u32()
+    fn get_u32(&mut self) -> Option<u32> {
+        if self.buffer.len() < 3 {
+            return None;
+        }
+
+        Some(self.buffer.get_u32())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_u32(&mut self) -> u32 {
-        self.buffer.get_u32_le()
+    fn get_u32(&mut self) -> Option<u32> {
+        if self.buffer.len() < 3 {
+            return None;
+        }
+
+        Some(self.buffer.get_u32_le())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_u64(&mut self) -> u64 {
-        self.buffer.get_u64()
+    fn get_u64(&mut self) -> Option<u64> {
+        if self.buffer.len() < size_of::<u64>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u64())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_u64(&mut self) -> u64 {
-        self.buffer.get_u64_le()
+    fn get_u64(&mut self) -> Option<u64> {
+        if self.buffer.len() < size_of::<u64>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u64_le())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_u128(&mut self) -> u128 {
-        self.buffer.get_u128()
+    fn get_u128(&mut self) -> Option<u128> {
+        if self.buffer.len() < size_of::<u128>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u128())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_u128(&mut self) -> u128 {
-        self.buffer.get_u128_le()
+    fn get_u128(&mut self) -> Option<u128> {
+        if self.buffer.len() < size_of::<u128>() {
+            return None;
+        }
+
+        Some(self.buffer.get_u128_le())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_f32(&mut self) -> f32 {
-        self.buffer.get_f32()
+    fn get_f32(&mut self) -> Option<f32> {
+        if self.buffer.len() < size_of::<f32>() {
+            return None;
+        }
+
+        Some(self.buffer.get_f32())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_f32(&mut self) -> f32 {
-        self.buffer.get_f32_le()
+    fn get_f32(&mut self) -> Option<f32> {
+        if self.buffer.len() < size_of::<f32>() {
+            return None;
+        }
+
+        Some(self.buffer.get_f32_le())
     }
 
     #[cfg(target_endian = "big")]
-    fn get_f64(&mut self) -> f64 {
-        self.buffer.get_f64()
+    fn get_f64(&mut self) -> Option<f64> {
+        if self.buffer.len() < size_of::<f64>() {
+            return None;
+        }
+
+        Some(self.buffer.get_f64())
     }
 
     #[cfg(target_endian = "little")]
-    fn get_f64(&mut self) -> f64 {
-        self.buffer.get_f64_le()
+    fn get_f64(&mut self) -> Option<f64> {
+        if self.buffer.len() < size_of::<f64>() {
+            return None;
+        }
+
+        Some(self.buffer.get_f64_le())
     }
 
-    fn get_slice(&mut self, length: usize) -> Vec<u8> {
-        self.buffer.copy_to_bytes(length).to_vec()
+    fn get_slice(&mut self, length: usize) -> Option<Vec<u8>> {
+        if self.buffer.len() < length {
+            return None;
+        }
+
+        Some(self.buffer.copy_to_bytes(length).to_vec())
     }
 
     fn to_vec(&self) -> Vec<u8> {
