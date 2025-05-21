@@ -32,6 +32,10 @@ pub trait ReadBuffer {
     fn get_buffer(&mut self, length: usize) -> Option<impl ReadBuffer>;
 
     fn to_vec(&self) -> Vec<u8>;
+
+    fn remaining(&self) -> usize;
+
+    fn is_empty(&self) -> bool;
 }
 
 pub trait WriteBuffer {

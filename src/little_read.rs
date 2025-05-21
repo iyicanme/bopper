@@ -188,4 +188,12 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
     fn to_vec(&self) -> Vec<u8> {
         self.buffer.to_vec()
     }
+
+    fn remaining(&self) -> usize {
+        self.buffer.len()
+    }
+
+    fn is_empty(&self) -> bool {
+        self.remaining() == 0
+    }
 }
