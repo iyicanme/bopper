@@ -14,14 +14,14 @@ impl<'a> LittleEndianReadBuffer<'a> {
 }
 
 impl ReadBuffer for LittleEndianReadBuffer<'_> {
-    fn skip(&mut self, amount: usize) -> bool {
+    fn skip(&mut self, amount: usize) -> Option<()> {
         if amount > self.buffer.len() {
-            return false;
+            return None;
         }
 
         self.buffer.advance(amount);
 
-        true
+        Some(())
     }
 
     fn get_u8(&mut self) -> Option<u8> {

@@ -9,7 +9,7 @@ mod little_read;
 mod little_write;
 
 pub trait ReadBuffer {
-    fn skip(&mut self, amount: usize) -> bool;
+    fn skip(&mut self, amount: usize) -> Option<()>;
 
     fn get_u8(&mut self) -> Option<u8>;
 
