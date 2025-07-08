@@ -52,7 +52,7 @@ impl ReadBuffer for BigEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "big")]
     fn get_u24(&mut self) -> Option<u32> {
-        if self.buffer.len() < size_of::<u16>() {
+        if self.buffer.len() < 3 * size_of::<u8>() {
             return None;
         }
 
@@ -65,7 +65,7 @@ impl ReadBuffer for BigEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "little")]
     fn get_u24(&mut self) -> Option<u32> {
-        if self.buffer.len() < size_of::<u16>() {
+        if self.buffer.len() < 3 * size_of::<u8>() {
             return None;
         }
 
@@ -78,7 +78,7 @@ impl ReadBuffer for BigEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "big")]
     fn get_u32(&mut self) -> Option<u32> {
-        if self.buffer.len() < 3 {
+        if self.buffer.len() < size_of::<u32>() {
             return None;
         }
 
@@ -87,7 +87,7 @@ impl ReadBuffer for BigEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "little")]
     fn get_u32(&mut self) -> Option<u32> {
-        if self.buffer.len() < 3 {
+        if self.buffer.len() < size_of::<u32>() {
             return None;
         }
 

@@ -52,7 +52,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "little")]
     fn get_u24(&mut self) -> Option<u32> {
-        if self.buffer.len() < 3 {
+        if self.buffer.len() < 3 * size_of::<u8>() {
             return None;
         }
 
@@ -65,7 +65,7 @@ impl ReadBuffer for LittleEndianReadBuffer<'_> {
 
     #[cfg(target_endian = "big")]
     fn get_u24(&mut self) -> Option<u32> {
-        if self.buffer.len() < 3 {
+        if self.buffer.len() < 3 * size_of::<u8>() {
             return None;
         }
 
