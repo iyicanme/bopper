@@ -36,6 +36,8 @@ pub trait ReadBuffer {
     fn remaining(&self) -> usize;
 
     fn is_empty(&self) -> bool;
+
+    fn offset(&self) -> usize;
 }
 
 pub trait WriteBuffer {
